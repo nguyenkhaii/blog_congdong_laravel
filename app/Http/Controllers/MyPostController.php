@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Auth;
 
 class MyPostController extends Controller
 {
-    // Hiển thị danh sách bài viết của thành viên
     public function index()
     {
         $posts = Post::with(['category', 'tags'])

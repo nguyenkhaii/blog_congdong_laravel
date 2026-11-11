@@ -30,13 +30,11 @@ class User extends Authenticatable
         ];
     }
 
-    // Một người dùng có nhiều bài viết
     public function posts()
     {
         return $this->hasMany(Post::class);
     }
 
-    // Một người dùng có nhiều bình luận
     public function comments()
     {
         return $this->hasMany(Comment::class);

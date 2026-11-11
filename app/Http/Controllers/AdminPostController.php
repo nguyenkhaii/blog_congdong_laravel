@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 
 class AdminPostController extends Controller
 {
-    // Hiển thị tất cả bài viết
     public function index()
     {
         $posts = Post::with(['user', 'category'])
@@ -18,7 +17,6 @@ class AdminPostController extends Controller
         return view('admin.posts.index', compact('posts'));
     }
 
-    // Xóa bài viết vi phạm
     public function destroy(Post $post)
     {
         $postId = $post->id;

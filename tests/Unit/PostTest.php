@@ -19,7 +19,6 @@ class PostTest extends TestCase
         $this->assertEquals('Nội dung bài viết kiểm thử.', $post->content);
     }
 
-    // Kiểm tra ngày đăng được chuyển thành kiểu ngày giờ
     public function test_post_published_at_is_datetime(): void
     {
         $post = new Post([

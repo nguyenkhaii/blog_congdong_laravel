@@ -10,13 +10,11 @@ use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
-    // Hiển thị trang đăng ký
     public function register()
     {
         return view('auth.register');
     }
 
-    // Xử lý đăng ký
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -40,13 +38,11 @@ class AuthController extends Controller
         return redirect()->route('login');
     }
 
-    // Hiển thị trang đăng nhập
     public function login()
     {
         return view('auth.login');
     }
 
-    // Xử lý đăng nhập
     public function loginStore(Request $request)
     {
         $credentials = $request->validate([
@@ -76,7 +72,6 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    // Xử lý đăng xuất
     public function logout(Request $request)
     {
         if (Auth::check()) {

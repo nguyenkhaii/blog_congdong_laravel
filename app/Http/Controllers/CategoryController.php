@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
-    // Hiển thị danh sách danh mục
     public function index()
     {
         $categories = Category::withCount('posts')
@@ -19,13 +18,11 @@ class CategoryController extends Controller
         return view('admin.categories.index', compact('categories'));
     }
 
-    // Hiển thị form thêm danh mục
     public function create()
     {
         return view('admin.categories.create');
     }
 
-    // Xử lý thêm danh mục
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -49,13 +46,11 @@ class CategoryController extends Controller
             ->with('success', 'Thêm danh mục thành công!');
     }
 
-    // Hiển thị form sửa danh mục
     public function edit(Category $category)
     {
         return view('admin.categories.edit', compact('category'));
     }
 
-    // Xử lý cập nhật danh mục
     public function update(Request $request, Category $category)
     {
         $validated = $request->validate([
@@ -79,7 +74,6 @@ class CategoryController extends Controller
             ->with('success', 'Cập nhật danh mục thành công!');
     }
 
-    // Xử lý xóa danh mục
     public function destroy(Category $category)
     {
         $categoryId = $category->id;

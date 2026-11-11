@@ -14,7 +14,6 @@
 
     <hr>
 
-    {{-- Hiển thị lỗi --}}
     @if ($errors->any())
         <div style="color: red;">
             @foreach ($errors->all() as $error)
@@ -23,7 +22,6 @@
         </div>
     @endif
 
-    {{-- Form thêm danh mục --}}
     <form action="{{ route('admin.categories.store') }}" method="POST">
 
         @csrf

@@ -15,7 +15,6 @@ class Category extends Model
         'description',
     ];
 
-    // Một danh mục có nhiều bài viết
     public function posts()
     {
         return $this->hasMany(Post::class);

@@ -15,13 +15,11 @@ class Comment extends Model
         'content',
     ];
 
-    // Bình luận thuộc về một bài viết
     public function post()
     {
         return $this->belongsTo(Post::class);
     }
 
-    // Bình luận thuộc về một người dùng
     public function user()
     {
         return $this->belongsTo(User::class);

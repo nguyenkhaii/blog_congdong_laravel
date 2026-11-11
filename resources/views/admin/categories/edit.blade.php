@@ -14,7 +14,6 @@
 
     <hr>
 
-    {{-- Hiển thị lỗi --}}
     @if ($errors->any())
         <div style="color: red;">
             @foreach ($errors->all() as $error)
@@ -23,7 +22,6 @@
         </div>
     @endif
 
-    {{-- Form chỉnh sửa --}}
     <form
         action="{{ route('admin.categories.update', $category->id) }}"
         method="POST"

@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Log;
 
 class AdminCommentController extends Controller
 {
-    // Hiển thị tất cả bình luận
     public function index()
     {
         $comments = Comment::with(['user', 'post'])
@@ -17,7 +16,6 @@ class AdminCommentController extends Controller
         return view('admin.comments.index', compact('comments'));
     }
 
-    // Xóa bình luận vi phạm
     public function destroy(Comment $comment)
     {
         $commentId = $comment->id;

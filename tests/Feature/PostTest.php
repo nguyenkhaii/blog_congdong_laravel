@@ -13,7 +13,6 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
 
-    // Kiểm tra danh sách bài viết hiển thị thành công
     public function test_public_post_list_displays_published_posts(): void
     {
         $post = Post::factory()->create();
@@ -24,7 +23,6 @@ class PostTest extends TestCase
         $response->assertSee($post->title);
     }
 
-    // Kiểm tra chi tiết bài viết bằng slug
     public function test_public_post_detail_displays_correct_post(): void
     {
         $post = Post::factory()->create();
@@ -35,7 +33,6 @@ class PostTest extends TestCase
         $response->assertSee($post->title);
     }
 
-    // Kiểm tra khách không thể xem bài viết nháp
     public function test_draft_post_cannot_be_viewed_by_guest(): void
     {
         $post = Post::factory()->create([
@@ -48,7 +45,6 @@ class PostTest extends TestCase
         $response->assertStatus(404);
     }
 
-    // Kiểm tra tác giả có thể mở trang chỉnh sửa bài viết
     public function test_post_author_can_access_edit_page(): void
     {
         $user = User::factory()->create();
@@ -63,7 +59,6 @@ class PostTest extends TestCase
         $response->assertStatus(200);
     }
 
-    // Kiểm tra thành viên khác không thể chỉnh sửa bài viết
     public function test_other_member_cannot_access_edit_page(): void
     {
         $author = User::factory()->create();
@@ -79,7 +74,6 @@ class PostTest extends TestCase
         $response->assertStatus(403);
     }
 
-    // Kiểm tra thành viên đã đăng nhập có thể bình luận
     public function test_logged_in_member_can_comment_on_published_post(): void
     {
         Mail::fake();
@@ -109,7 +103,6 @@ class PostTest extends TestCase
         Mail::assertQueued(CommentPostedMail::class);
     }
 
-    // Kiểm tra khách chưa đăng nhập không thể bình luận
     public function test_guest_cannot_comment_on_post(): void
     {
         $post = Post::factory()->create();

@@ -30,25 +30,21 @@ class Post extends Model
         ];
     }
 
-    // Bài viết thuộc về một người dùng
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Bài viết thuộc về một danh mục
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
-    // Bài viết có nhiều tags
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
     }
 
-    // Bài viết có nhiều bình luận
     public function comments()
     {
         return $this->hasMany(Comment::class);

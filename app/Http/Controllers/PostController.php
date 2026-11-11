@@ -55,7 +55,6 @@ class PostController extends Controller
             'posts',
             'categories',
             'tags',
-            'messages'
         ));
     }
 
@@ -276,7 +275,6 @@ class PostController extends Controller
             ->with('success', 'Đã chuyển bài viết vào thùng rác!');
     }
 
-    // Hiển thị thùng rác
     public function trash()
     {
         $query = Post::onlyTrashed()
@@ -291,7 +289,6 @@ class PostController extends Controller
         return view('posts.trash', compact('posts'));
     }
 
-    // Khôi phục bài viết
     public function restore($id)
     {
         $post = Post::onlyTrashed()->findOrFail($id);
@@ -315,7 +312,6 @@ class PostController extends Controller
             ->with('success', 'Khôi phục bài viết thành công!');
     }
 
-    // Xóa bài viết vĩnh viễn
     public function forceDelete($id)
     {
         $post = Post::onlyTrashed()->findOrFail($id);
@@ -346,7 +342,6 @@ class PostController extends Controller
             ->with('success', 'Đã xóa bài viết vĩnh viễn!');
     }
 
-    // Xử lý thêm bình luận và gửi email thông báo
     public function storeComment(Request $request, Post $post)
     {
         if (
@@ -373,10 +368,8 @@ class PostController extends Controller
             'comment_id' => $comment->id,
         ]);
 
-        // Lấy thông tin tác giả bài viết
         $post->load('user');
 
-        // Đưa email thông báo vào hàng đợi
         if ($post->user) {
             Mail::to($post->user->email)
                 ->queue(new CommentPostedMail($comment));
@@ -386,7 +379,6 @@ class PostController extends Controller
             ->with('success', 'Bình luận thành công!');
     }
 
-    // Xử lý xóa bình luận
     public function destroyComment(Comment $comment)
     {
         $user = Auth::user();
@@ -399,7 +391,6 @@ class PostController extends Controller
             abort(403, 'Bạn không có quyền xóa bình luận này.');
         }
 
-        // Lấy thông tin trước khi xóa bình luận
         $postSlug = $comment->post->slug;
         $commentId = $comment->id;
         $postId = $comment->post_id;

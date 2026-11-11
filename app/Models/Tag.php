@@ -14,7 +14,6 @@ class Tag extends Model
         'slug',
     ];
 
-    // Một tag có thể thuộc nhiều bài viết
     public function posts()
     {
         return $this->belongsToMany(Post::class);
