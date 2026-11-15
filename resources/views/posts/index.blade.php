@@ -1,122 +1,109 @@
 @extends('layouts.app')
 
-@section('title', 'Quản lý bài viết')
+@section('title', 'Trang chủ')
 
 @section('content')
 
-    <h2>Quản lý bài viết</h2>
+<h2>Danh sách bài viết</h2>
 
-    <p>
-        <a href="{{ route('admin.dashboard') }}">
-            Quay lại trang quản trị
-        </a>
-    </p>
+<form action="{{ route('posts.index') }}" method="GET">
 
-    <hr>
+    <input
+        type="text"
+        name="search"
+        placeholder="Tìm kiếm bài viết..."
+        value="{{ request('search') }}"
+    >
 
-    @if (session('success'))
-        <p style="color: green;">
-            {{ session('success') }}
-        </p>
-    @endif
+    <select name="category">
+        <option value="">Tất cả danh mục</option>
 
-    <h3>Danh sách tất cả bài viết</h3>
+        @foreach ($categories as $category)
+            <option
+                value="{{ $category->id }}"
+                {{ request('category') == $category->id ? 'selected' : '' }}
+            >
+                {{ $category->name }}
+            </option>
+        @endforeach
+    </select>
 
-    <p>Tổng số bài viết: {{ $posts->total() }}</p>
+    <select name="tag">
+        <option value="">Tất cả tag</option>
 
-    <table border="1" cellpadding="10" cellspacing="0" width="100%">
+        @foreach ($tags as $tag)
+            <option
+                value="{{ $tag->id }}"
+                {{ request('tag') == $tag->id ? 'selected' : '' }}
+            >
+                {{ $tag->name }}
+            </option>
+        @endforeach
+    </select>
 
-        <thead>
-            <tr>
-                <th>STT</th>
-                <th>Tiêu đề</th>
-                <th>Tác giả</th>
-                <th>Danh mục</th>
-                <th>Trạng thái</th>
-                <th>Số bình luận</th>
-                <th>Ngày đăng</th>
-                <th>Thao tác</th>
-            </tr>
-        </thead>
+    <button type="submit">Tìm kiếm</button>
 
-        <tbody>
+    <a href="{{ route('posts.index') }}">Làm mới</a>
 
-            @forelse ($posts as $index => $post)
+</form>
 
-                <tr>
-                    <td>{{ $posts->firstItem() + $index }}</td>
+<hr>
 
-                    <td>{{ $post->title }}</td>
+@forelse ($posts as $post)
 
-                    <td>
-                        {{ $post->user->name ?? 'Người dùng đã bị xóa' }}
-                    </td>
+    <div style="border-bottom: 1px solid #ccc; padding: 15px 0;">
 
-                    <td>
-                        {{ $post->category->name ?? 'Chưa phân loại' }}
-                    </td>
+        <h3>
+            <a href="{{ route('posts.show', ['post' => $post->slug]) }}">
+                {{ $post->title }}
+            </a>
+        </h3>
 
-                    <td>
-                        @if ($post->status === 'published')
-                            Đã đăng
-                        @elseif ($post->status === 'draft')
-                            Bản nháp
-                        @elseif ($post->status === 'scheduled')
-                            Đã lên lịch
-                        @else
-                            {{ $post->status }}
-                        @endif
-                    </td>
+        @if ($post->image)
+            <p>
+                <img
+                    src="{{ asset('storage/' . $post->image) }}"
+                    alt="{{ $post->title }}"
+                    width="200"
+                >
+            </p>
+        @endif
 
-                    <td>{{ $post->comments_count }}</td>
+        <p>Tác giả: {{ $post->user->name ?? 'Không xác định' }}</p>
 
-                    <td>
-                        {{ $post->published_at?->format('d/m/Y H:i') ?? 'Chưa đăng' }}
-                    </td>
+        <p>Danh mục: {{ $post->category->name ?? 'Chưa phân loại' }}</p>
 
-                    <td>
-                        @if (
-                            $post->status === 'published'
-                            && $post->published_at
-                            && !$post->published_at->isFuture()
-                        )
-                            <a href="{{ route('posts.show', $post->slug) }}">
-                                Xem
-                            </a>
-                        @else
-                            <span>Chưa công khai</span>
-                        @endif
-
-                        <form
-                            action="{{ route('admin.posts.destroy', $post->id) }}"
-                            method="POST"
-                            style="display: inline;"
-                            onsubmit="return confirm('Bạn có chắc muốn xóa bài viết này không?')"
-                        >
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit">Xóa</button>
-                        </form>
-                    </td>
-                </tr>
-
+        <p>
+            Tag:
+            @forelse ($post->tags as $tag)
+                {{ $tag->name }}
             @empty
-
-                <tr>
-                    <td colspan="8" align="center">
-                        Chưa có bài viết nào.
-                    </td>
-                </tr>
-
+                Chưa có tag
             @endforelse
+        </p>
 
-        </tbody>
+        <p>
+            {{ \Illuminate\Support\Str::limit(strip_tags($post->content), 200) }}
+        </p>
 
-    </table>
+        <p>
+            Ngày đăng: {{ $post->published_at?->format('d/m/Y H:i') }}
+        </p>
 
-    <br>
+        <a href="{{ route('posts.show', ['post' => $post->slug]) }}">
+            Xem chi tiết
+        </a>
 
-    {{ $posts->links() }}
+    </div>
+
+@empty
+
+    <p>Chưa có bài viết nào.</p>
+
+@endforelse
+
+<br>
+
+{{ $posts->links() }}
 
 @endsection

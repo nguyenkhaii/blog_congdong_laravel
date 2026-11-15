@@ -5,66 +5,82 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Blog cộng đồng')</title>
+
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
 
 <body>
 
-    <h1>Website quản lý bài viết</h1>
+    <div class="container">
 
-    <nav>
-        <a href="{{ route('posts.index') }}">Trang chủ</a> |
+        <header>
+            <h1>Website quản lý bài viết</h1>
+            <p>Chia sẻ kiến thức và kết nối cộng đồng</p>
+        </header>
 
-        @auth
-            <a href="{{ route('posts.create') }}">Thêm bài viết</a> |
+        <nav>
+            <a href="{{ route('posts.index') }}">Trang chủ</a>
 
-            <a href="{{ route('posts.my-posts') }}">Bài viết của tôi</a> |
+            @auth
+                <a href="{{ route('posts.create') }}">Thêm bài viết</a>
 
-            <a href="{{ route('posts.trash') }}">Thùng rác</a> |
+                <a href="{{ route('posts.my-posts') }}">Bài viết của tôi</a>
 
-            <span>Xin chào, {{ auth()->user()->name }}</span>
+                <a href="{{ route('posts.trash') }}">Thùng rác</a>
 
-            @if (auth()->user()->role === 'admin')
-                <hr>
+                <span class="welcome">
+                    Xin chào, {{ auth()->user()->name }}
+                </span>
 
-                <strong>Khu vực quản trị:</strong>
+                @if (auth()->user()->role === 'admin')
+                    <div class="admin-menu">
+                        <strong>Khu vực quản trị:</strong>
 
-                <a href="{{ route('admin.dashboard') }}">Tổng quan</a> |
+                        <a href="{{ route('admin.dashboard') }}">Tổng quan</a>
 
-                <a href="{{ route('admin.categories.index') }}">Quản lý danh mục</a> |
+                        <a href="{{ route('admin.categories.index') }}">Quản lý danh mục</a>
 
-                <a href="{{ route('admin.posts.index') }}">Quản lý bài viết</a> |
+                        <a href="{{ route('admin.posts.index') }}">Quản lý bài viết</a>
 
-                <a href="{{ route('admin.comments.index') }}">Quản lý bình luận</a>
+                        <a href="{{ route('admin.comments.index') }}">Quản lý bình luận</a>
+                    </div>
+                @endif
 
-                <hr>
+                <form action="{{ route('logout') }}" method="POST" class="logout-form">
+                    @csrf
+                    <button type="submit">Đăng xuất</button>
+                </form>
+
+            @else
+                <a href="{{ route('login') }}">Đăng nhập</a>
+
+                <a href="{{ route('register') }}">Đăng ký</a>
+            @endauth
+        </nav>
+
+        <main>
+
+            @if (session('success'))
+                <p class="success-message">
+                    {{ session('success') }}
+                </p>
             @endif
 
-            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                @csrf
-                <button type="submit">Đăng xuất</button>
-            </form>
+            @if (session('error'))
+                <p class="error-message">
+                    {{ session('error') }}
+                </p>
+            @endif
 
-        @else
-            <a href="{{ route('login') }}">Đăng nhập</a> |
-            <a href="{{ route('register') }}">Đăng ký</a>
-        @endauth
-    </nav>
+            @yield('content')
 
-    <hr>
+        </main>
 
-    @if (session('success'))
-        <p style="color: green;">
-            {{ session('success') }}
-        </p>
-    @endif
+        <footer>
+            <p>Blog cộng đồng - Laravel 13</p>
+        </footer>
 
-    @if (session('error'))
-        <p style="color: red;">
-            {{ session('error') }}
-        </p>
-    @endif
-
-    @yield('content')
+    </div>
 
 </body>
 
